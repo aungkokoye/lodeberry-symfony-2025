@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Welcome Page{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-center align-items-center p-3" role="alert">
+        <a class="nav-link" href="">
+            <i class="fa fa-hand-pointer-o  fa-2x" aria-hidden="true"></i>
+            <span>click here for our products</span>
+        </a>
+    </div>
+    <div class="jumbotron">
+        <img src="{{ asset('build/images/loadberry-note.png') }}"  alt="Image description" class="img-fluid" style="max-width: 100%; height: auto;">
+    </div>
+    <div class="container mt-4 mb-5">
+        <div class="p-4 border rounded shadow-sm bg-light">
+            <h2 class="text-primary mb-3">What is an Interim CTO?</h2>
+            <p>
+                An <strong>Interim CTO</strong> is a Chief Technology Officer who leads a business's technology direction on a temporary or part-time basis.
+            </p>
+
+            <h3 class="text-secondary mt-4">Why Businesses Need Interim CTOs</h3>
+            <p>
+                Every business needs to constantly upgrade technologically to keep up with the times.
+                Falling behind in technology can lead to competitors overtaking you.
+                To prevent this, businesses need CTOs. However, most businesses hesitate to hire full-time CTOs due to budget constraints.
+            </p>
+            <p>
+                <em>That's where Interim CTOs come in.</em> SMEs often hire them for short-term projects or part-time roles.
+                For example:
+            </p>
+            <ul class="list-group mb-4">
+                <li class="list-group-item">4-8 hours per week</li>
+                <li class="list-group-item">2 days per month</li>
+            </ul>
+
+            <h3 class="text-secondary mt-4">Key Responsibilities of an Interim CTO</h3>
+            <ul class="list-group mb-4">
+                <li class="list-group-item">Recommend technologies that need updating</li>
+                <li class="list-group-item">Help make technology choices</li>
+                <li class="list-group-item">Negotiate with service providers</li>
+                <li class="list-group-item">Review contracts</li>
+                <li class="list-group-item">Screen out overpriced or unnecessary services</li>
+                <li class="list-group-item">Provide cyber-security guidance</li>
+            </ul>
+
+            <h3 class="text-secondary mt-4">Choosing the Right Interim CTO</h3>
+            <p>
+                One major challenge for businesses is understanding technical jargon. Business owners may struggle, even if they're experienced, leading to costly mistakes.
+            </p>
+            <p>
+                It's crucial to hire someone trustworthy with proven expertise.
+                Pre-negotiate responsibilities, compensation, and time commitments to avoid conflicts of interest.
+            </p>
+
+            <h4 class="text-success mt-4">Final Recommendations</h4>
+            <p>
+                For long-term growth and competitiveness, having a <strong>trustworthy, skilled CTO</strong> is vital.
+                Even if you don't hire full-time, consult with a part-time CTO regularly for guidance.
+            </p>
+        </div>
+    </div>
+    <hr class="my-4">
+    <div class="d-flex justify-content-center align-items-center p-3" role="alert">
+        <a href="https://www.facebook.com/loadberry/" target="_blank" rel="noopener noreferrer">
+            <i class="fa fa-facebook-official  fa-2x" aria-hidden="true"></i>
+        </a>
+    </div>
+{% endblock %}
