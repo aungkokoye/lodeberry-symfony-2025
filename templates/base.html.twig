@@ -33,8 +33,8 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" title="logout({{ app.user.email }})" href="">
-                            <i class="fas fa-sign-out-alt fa-2x" aria-hidden="true"></i>
+                        <a class="nav-link" title="logout({{ app.user.email }})" href="{{ path('app_logout') }}">
+                            <i class="fa fa-sign-out fa-2x" aria-hidden="true"></i>
                         </a>
                     </li>
                 {% else %}
@@ -44,7 +44,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" title="login" href="">
+                        <a class="nav-link" title="login" href="{{ path('app_login') }}">
                             <i class="fa fa-sign-in fa-2x" aria-hidden="true"></i>
                         </a>
                     </li>
@@ -55,6 +55,12 @@
         </nav>
 
         <div>
+            <div class="d-flex justify-content-center align-items-center p-3" role="alert">
+                <a class="nav-link" href="">
+                    <i class="fa fa-hand-pointer-o  fa-2x" aria-hidden="true"></i>
+                    <span>click here for our products</span>
+                </a>
+            </div>
             {% block body %}{% endblock %}
         </div>
     </body>
