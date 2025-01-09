@@ -26,10 +26,12 @@ final class Version20250109143644 extends AbstractMigration
                             `roles` JSON NOT NULL,
                             `password` VARCHAR(255) NOT NULL,
                             `is_verified` BOOLEAN NOT NULL DEFAULT FALSE,
+                            `login_attempts` INT NOT NULL DEFAULT  0,
+                            `last_login_at` DATETIME NOT NULL DEFAULT NOW(),
                             
                             UNIQUE INDEX UNIQ_IDENTIFIER_EMAIL (`email`),
                             PRIMARY KEY(`id`)
-                  ) 
+                  )
                   DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB'
         );
 
