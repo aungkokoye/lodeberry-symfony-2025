@@ -58,7 +58,7 @@ class AppUserAuthenticator extends AbstractLoginFormAuthenticator
             new UserBadge($email),
             new PasswordCredentials($request->getPayload()->getString('password')),
             [
-                new CsrfTokenBadge('authenticate', $request->getPayload()->getString('_csrf_token')),
+                new CsrfTokenBadge('login_form', $request->getPayload()->getString('_csrf_token')),
                 new RememberMeBadge(),
             ]
         );
@@ -68,7 +68,10 @@ class AppUserAuthenticator extends AbstractLoginFormAuthenticator
     {
         $email = $this->getEmail($request);
         $user = $this->getUser($email);
-        $this->updateLoginAttemptData($user, 0);
+
+        if ($user instanceof User) {
+            $this->updateLoginAttemptData($user, 0);
+        }
 
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
@@ -81,7 +84,10 @@ class AppUserAuthenticator extends AbstractLoginFormAuthenticator
     {
         $email = $this->getEmail($request);
         $user = $this->getUser($email);
-        $this->updateLoginAttemptData($user, $user->getLoginAttempts() + 1);
+
+        if ($user instanceof User) {
+            $this->updateLoginAttemptData($user, $user->getLoginAttempts() + 1);
+        }
 
         if ($request->hasSession()) {
             $request->getSession()->set(SecurityRequestAttributes::AUTHENTICATION_ERROR, $exception);

@@ -5,12 +5,14 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[ORM\HasLifecycleCallbacks]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     const MAX_LOGIN_ATTEMPT = 3;
@@ -43,6 +45,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $lastLoginAt;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $hashExpired;
+    #[ORM\Column]
+    private string $hash;
+
 
 
     public function isVerified(): bool
@@ -161,5 +168,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->loginAttempts = 0;
         $this->lastLoginAt = new \DateTime();
+    }
+
+    public function setVerified(bool $isVerified): static
+    {
+        $this->isVerified = $isVerified;
+
+        return $this;
+    }
+    public function getHashExpired(): ?\DateTimeInterface
+    {
+        return $this->hashExpired;
+    }
+    public function setHashExpired(?\DateTimeInterface $hashExpired): static
+    {
+        $this->hashExpired = $hashExpired;
+        return $this;
+    }
+    public function getHash(): string
+    {
+        return $this->hash;
+    }
+    public function setHash(string $hash): static
+    {
+        $this->hash = $hash;
+        return $this;
     }
 }

@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            {{ form_errors(registrationForm) }}
+        </div>
+
+        <div class="row">
+            {% for message in app.flashes('verify-email-error') %}
+                <div class="alert alert-danger">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="row bg-light ">
+            <div class="col-4 mt-4 mb-5">
+
+                <h1 class="h3 mb-3 font-weight-normal">Please register</h1>
+
+                {{ form_start(registrationForm, {'attr': {'novalidate': 'novalidate'}}) }}
+
+                {{ form_end(registrationForm) }}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
