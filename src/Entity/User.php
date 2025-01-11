@@ -44,7 +44,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
 
-    #[Assert\NotBlank]
+
     #[ORM\Column(length: 100)]
     private string $password;
 

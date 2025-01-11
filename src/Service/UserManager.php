@@ -34,4 +34,9 @@ class UserManager
         $this->em->persist($user);
         $this->em->flush();
     }
+
+    public function getUserByEmail(string $email): ?User
+    {
+        return $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
+    }
 }

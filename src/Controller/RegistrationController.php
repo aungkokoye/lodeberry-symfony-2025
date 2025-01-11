@@ -5,22 +5,18 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Exception\VerifiedEmailException;
 use App\Form\RegistrationFormType;
-use App\Security\AppUserAuthenticator;
+use App\Form\ResendEmailFormType;
 use App\Security\EmailVerifier;
 use App\Service\MailerManager;
 use App\Service\UserManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
 {
@@ -38,7 +34,6 @@ class RegistrationController extends AbstractController
     public function register(
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher,
-        Security $security,
         EntityManagerInterface $entityManager,
         UserManager $userManager,
         MailerManager $mailerManager
@@ -109,6 +104,50 @@ class RegistrationController extends AbstractController
         );
 
         return $this->redirectToRoute('app_login');
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     */
+    #[Route('/resend-verify-email', name: 'app_resend_verify_email')]
+    public function resendVerifyEmail(
+        Request $request,
+        UserManager $userManager,
+        MailerManager $mailerManager
+    ): Response {
+        $form = $this->createForm(ResendEmailFormType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $email = $form->get('email')->getData();
+            $user = $userManager->getUserByEmail($email);
+
+            if ($user instanceof User) {
+                $this->addFlash(
+                    'verify-email-error',
+                    "The email address {$email} does not belong to any existing user."
+                );
+
+                return $this->redirectToRoute('app_resend_verify_email');
+            }
+
+            $userManager->createHash($user);
+
+            $mailerManager->sendUserVerifiedEmail(
+                $user,
+                $this->renderView('registration/confirmation_email.html.twig', ['user' => $user])
+            );
+
+            $this->addFlash(
+                'verify-email-success',
+                'Successfully Resend Email!'
+            );
+
+            return $this->redirectToRoute('app_resend_verify_email');
+        }
+
+        return $this->render('registration/resend_verify_email.html.twig', [
+            'form' => $form,
+        ]);
     }
 
 }
