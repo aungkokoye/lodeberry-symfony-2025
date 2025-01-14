@@ -16,6 +16,13 @@
             </div>
         {% endfor %}
     </div>
+    <div class="row">
+        {% for message in app.flashes('register-error') %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
     <div class="row bg-light ">
         <div class="col-4 mt-4 mb-5">
             <form method="post" novalidate>
@@ -48,6 +55,10 @@
                     Sign in
                 </button>
             </form>
+
+            <div class="row  bg-light pt-5 pb-2">
+                <a href="{{ path('app_reset_password_email') }}" class="link-info">Forgot Password?</a>
+            </div>
         </div>
         </div>
 </div>

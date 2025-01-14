@@ -20,13 +20,13 @@ class MailerManager
     /**
      * @throws TransportExceptionInterface
      */
-    public function sendUserVerifiedEmail(User $user, string $html): void {
+    public function sendUserVerifiedEmail(User $user, string $subject, string $html): void {
 
         // Create and send the email
         $email = (new Email())
             ->from(self::ADMIN_EMAIL)
             ->to($user->getEmail())
-            ->subject('Please verify email!')
+            ->subject($subject)
             ->html($html);
 
         $this->mailer->send($email);

@@ -60,7 +60,7 @@ class AdminUserCreateCommand extends Command
         );
         try {
             $newAdminUser->setEmail($email)
-                ->setRoles(["USER", "ADMIN"])
+                ->setRoles(["ROLE_USER", "ROLE_ADMIN"])
                 ->setPassword($hashPassword)
                 ->setIsVerified(1)
                 ->setLoginAttempts(0)

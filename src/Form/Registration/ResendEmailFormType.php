@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\Registration;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -28,9 +28,9 @@ class ResendEmailFormType extends AbstractType
                 ]
             ])
             ->add('save', SubmitType::class, [
-                'label' => 'Resend',
+                'label' => 'Send',
                 'attr' => ['class' => 'btn btn-primary'], // Optional: Add Bootstrap or custom CSS classes
-            ]);;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
