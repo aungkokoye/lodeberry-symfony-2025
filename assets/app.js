@@ -9,13 +9,10 @@ import './bootstrap.js';
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
 
+import './js/cart.js'
+
 // Jquery import
 import $ from 'jquery';
 
 // for bootstrap@4
 import 'bootstrap';
-
-
-$(document).ready(function(){
-    console.log('Welcome to WebPack!');
-});

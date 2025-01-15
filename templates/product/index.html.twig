@@ -4,7 +4,7 @@
 
 {% block banner %}
     <div class="d-flex justify-content-center align-items-center p-3" role="alert">
-        <a class="nav-link" href="">
+        <a class="nav-link" href="{{ path('app_index') }}">
             <i class="fa fa-shopping-basket  fa-2x" aria-hidden="true"></i>
             <span>click here for basket check out</span>
         </a>
@@ -37,9 +37,10 @@
                         </p>
                     </div>
                     <div class="card-footer">
-                        <p>
-                            <a class = "btn btn-primary" href = "#" >View</a>
-                            <a class = "btn btn-success" href = "#" >Add to Basket</a>
+                        <p class="justify-content-between">
+                            <button type="button" class="btn btn-primary">View</button>
+                            <button type="button" class="btn btn-success cart-add" id="{{ product.id }}">Add to Basket</button>
+                            <span id="{{ product.id }}_message" ></span>
                         </p>
                     </div>
                 </div>
