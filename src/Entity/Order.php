@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
@@ -15,7 +16,7 @@ class Order
     const ORDER_CREATE_STATUS = 0;
 
     const ORDER_STATUS_ARRAY = [
-        0 => 'order create'
+        0 => 'order received'
     ];
 
     #[ORM\Id]
@@ -30,6 +31,13 @@ class Order
     #[ORM\JoinColumn(nullable: false)]
     private ?User $orderBy = null;
 
+    #[Assert\NotBlank()]
+    #[Assert\Length(
+        min: 20,
+        max: 200,
+        minMessage: 'Your address cannot be shorter than {{ limit }} characters.',
+        maxMessage: 'Your address cannot be longer than {{ limit }} characters.'
+    )]
     #[ORM\Column(length: 255)]
     private ?string $address = null;
 
@@ -45,7 +53,7 @@ class Order
     /**
      * @var Collection<int, ProductOrder>
      */
-    #[ORM\OneToMany(targetEntity: ProductOrder::class, mappedBy: 'orderRef', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: ProductOrder::class, mappedBy: 'orderRef', cascade: ['persist'], orphanRemoval: true)]
     private Collection $productOrders;
 
     public function __construct()

@@ -31,12 +31,20 @@ class CartSessionStorage
     {
         $cart = $this->getCart();
 
-        if (!is_array($cart)) {
-            $this->setCart([$productID => $quantity]);
+        if (isset($cart[$productID])) {
+            $cartQuantity = $cart[$productID];
+            $updatedQuantity = $cartQuantity + $quantity;
+            if ($updatedQuantity <= 3 && $updatedQuantity >= 0) {
+                $cart[$productID] = $updatedQuantity;
+                $this->setCart($cart);
+            }
         } else {
-            $cart[$productID] = isset($cart[$productID]) ? $cart[$productID] + $quantity : $quantity;
-            $this->setCart($cart);
+            if ($quantity === 1) {
+                $cart[$productID] = $quantity;
+            }
         }
+
+        $this->setCart($cart);
     }
 
     public function removeItem(int $productID)

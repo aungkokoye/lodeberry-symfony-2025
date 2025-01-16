@@ -18,9 +18,6 @@ class SecurityController extends AbstractController
              return $this->redirectToRoute('app_index');
          }
 
-//        $csrfToken = $csrfTokenManager->getToken('123')->getValue();
-//         var_dump($csrfToken);exit();
-
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user

@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Product;
 use App\Repository\ProductRepository;
+use App\Storage\CartSessionStorage;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,7 +17,8 @@ class ProductController extends AbstractController
     public function index(
         Request $request,
         ProductRepository $productRepository,
-        PaginatorInterface $paginator
+        PaginatorInterface $paginator,
+        CartSessionStorage $cartSessionStorage
     ): Response{
         $query = $productRepository->createQueryBuilder('p')
             ->where('p.active = :active')
@@ -29,7 +32,16 @@ class ProductController extends AbstractController
         );
 
         return $this->render('product/index.html.twig', [
-            'pagination' => $pagination
+            'pagination' => $pagination,
+            'cart'       => $cartSessionStorage->getCart()
+        ]);
+    }
+
+    #[Route('/product/{id}', name: 'app_product_view')]
+    public function view(Product $product)
+    {
+        return $this->render('product/view.html.twig', [
+            'product' => $product,
         ]);
     }
 }

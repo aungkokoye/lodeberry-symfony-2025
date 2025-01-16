@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Order;
 use App\Entity\ProductOrder;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -15,6 +16,16 @@ class ProductOrderRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, ProductOrder::class);
     }
+
+       public function findByOrder(Order $order): array
+       {
+           return $this->createQueryBuilder('po')
+               ->andWhere('po.orderRef = :order')
+               ->setParameter('order',$order)
+               ->getQuery()
+               ->getResult()
+           ;
+       }
 
     //    /**
     //     * @return ProductOrder[] Returns an array of ProductOrder objects

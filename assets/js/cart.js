@@ -19,17 +19,38 @@ document.addEventListener('turbo:load', function() {
     $('.cart-add').on('click', function (e) {
         e.preventDefault();
         const productId = $(this).attr('id');
-        const data = { id: productId };
-        const message = 'Fail to add to shopping cart.';
-        const messageDiv = $('#' + productId + '_message');
+        const data = { id: productId, add: true };
+        ajaxSetShoppingCart(data, productId);
+    });
 
+    $('.cart-minute').on('click', function (e) {
+        e.preventDefault();
+        const productId = $(this).attr('id');
+        const data = { id: productId, add: false };
+        ajaxSetShoppingCart(data, productId);
+    });
+
+    function ajaxSetShoppingCart(data, productId) {
+
+        const message = 'Fail to set to shopping cart.';
+        const messageDiv = $('#' + productId + '-message');
+        const quatantityDiv = $('#' + productId + '-quantity');
+        const totalAmountDiv = $('#cart-total-amount')
         $.ajax({
-            url: '/shopping-cart-add', // The URL to send the data to
+            url: '/shopping-cart-set', // The URL to send the data to
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(data),
             success: function(response) {
                 messageDiv.html("<span class='text-success'>" + response.message + "</span>");
+                if (quatantityDiv) {
+                    quatantityDiv.html("<span>" +  response.quantity + "<span>")
+                }
+                if (totalAmountDiv) {
+                    let totalAmount =  totalAmountDiv.text();
+                    totalAmount = parseFloat(totalAmount).toFixed(2) + response.adjustToatlAmount;
+                    totalAmountDiv.text(totalAmount);
+                }
             },
             error: function(xhr, status, error) {
                 try {
@@ -40,5 +61,5 @@ document.addEventListener('turbo:load', function() {
                 }
             }
         });
-    });
+    }
 });

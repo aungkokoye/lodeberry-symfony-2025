@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cart Check Out{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+    {% if products|length > 0 %}
+
+    {% set totalAmount = 0 %}
+
+    <div class="row">
+        <div class="col-8 col-md-8 col-sm-6">
+
+            {% for product in products %}
+
+            {% set totalAmount = totalAmount + ((cart[product.id] * product.price) / 100) %}
+            
+            <div class="row">
+                <div class="col-4 col-md-4 col-sm-6">
+                    <img src="{{ asset('build/images/product/' ~ product.image) }}" alt="image" class="img-fluid"
+                     style="height: 200px; width: auto; object-fit: cover;" >
+                </div>
+                <div class="col-8 col-md-8 col-sm-6">
+                    <div class="card" style="height: 200px; width: auto;" >
+                        <div class="card-header text-body"><h5>{{ product.name }}</h3></div>
+                        <div class="card-body">
+                            <div> <b>Price: £ {{ product.price/100 |number_format(2) }}</b> </div>
+                            <div> <b>Total Amount: £ {{ (cart[product.id] * product.price) / 100 | number_format(2)}}</b> </div>
+                            <br>
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button type="button" id="{{ product.id }}" class="btn btn-sm btn-primary cart-minute"> - </button>
+                                <button type="button" class="btn btn-sm btn-info"> 
+                                    <span id="{{ product.id }}-quantity">
+                                        {{ cart[product.id] }}
+                                    </span>
+                                </button>
+                                <button type="button" id="{{ product.id }}" class="btn btn-sm btn-primary cart-add">+</button>
+                            </div>
+                            <br>
+                            <span id="{{ product.id }}-message" ></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            {% endfor %}
+
+        </div>
+
+        <div class="col-4 col-md-4 col-sm-6">
+            <div class="card" style="height: auto; width: auto;" >
+                <div class="card-header text-body">
+                    <h5>
+                        Total Amount: £ <span id="cart-total-amount"> {{totalAmount}} </span>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+                    {{ form_end(form) }}
+
+                    <a class="btn btn-danger" href="{{ path('app_shopping_cart_checkout')}}" role="button">Canel Submit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% else %}
+<hr>
+<div class="row">
+    <h2 class="text-center orange">There is no item in shopping cart !</h2>
+</div>
+{% endif %}
+
+{% endblock %}

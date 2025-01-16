@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Product View ({{ product.id }}) {% endblock %}
+
+
+{% block body %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-4 col-md-4 col-sm-6">
+            <img src="{{ asset('build/images/product/' ~ product.image) }}" alt="image" class="img-fluid"
+             style="height: 400px; width: auto; object-fit: cover;" >
+        </div>
+        <div class="col-8 col-md-8 col-sm-6">
+            <div class="card" style="height: auto; width: auto;" >
+                <div class="card-header text-body"><h5>{{ product.name }}</h3></div>
+                <div class="card-body">
+                    <div> <b>Price: £ {{ product.price/100 |number_format(2) }}</b> </div>
+                    <hr>
+                    <b> Description </b>
+                    <p> 
+                        {{ product.description }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

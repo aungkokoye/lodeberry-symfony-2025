@@ -1,0 +1,106 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cart Payment{% endblock %}
+
+{% block body %}
+
+{% set totalAmount = 0 %}
+{% set totalItems = 0 %}
+
+<div class="container">
+
+    {% if productOrders|length > 0 %}
+
+    <div class="row">
+        {% for message in app.flashes('order-address-update-success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    <div class="row">
+        <div class="col-8 col-md-8 col-sm-6">
+            {% for productOrder in productOrders %}
+
+            {% set totalAmount = totalAmount + (productOrder.quantity * productOrder.product.price) / 100 | number_format(2) %}
+            {% set totalItems = totalItems + productOrder.quantity %}
+
+            <div class="row">
+                <div class="col-4 col-md-4 col-sm-6">
+                    <img src="{{ asset('build/images/product/' ~ productOrder.product.image) }}" alt="image" class="img-fluid"
+                     style="height: 200px; width: auto; object-fit: cover;" >
+                </div>
+                <div class="col-8 col-md-8 col-sm-6">
+                    <div class="card" style="height: 200px; width: auto;" >
+                        <div class="card-header text-body"><h5>{{ productOrder.product.name }}</h3></div>
+                        <div class="card-body">
+                            <div> <b>Price: £ {{ productOrder.product.price/100 |number_format(2) }}</b> </div>
+                            <div> <b>Quantity: {{ productOrder.quantity }}</b> </div>
+                            <div> <b>Total Amount: £ {{ (productOrder.quantity * productOrder.product.price) / 100 | number_format(2)}}</b> </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+
+            {% endfor%}
+        </div>
+
+        <div class="col-4 col-md-4 col-sm-6">
+            <div class="card" style="height: auto; width: auto;" >
+                <div class="card-header text-body">
+                    <h4 class="orange">
+                        Order Status: {{order.orderStatus}}
+                    </h4>
+                    <hr>
+                    <h5>
+                        Total Amount: £ {{totalAmount}} 
+                    </h5>
+                    <h5>
+                        Total Items: {{totalItems}} 
+                    </h5>
+                </div>
+                <div class="card-body form-group">
+                    <label for="app_sdb_hash">SDB (Spring Development Bank) Payment ID</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="app_sdb_hash" value="{{ app_sdb_hash }}" readonly>
+                    </div>
+                    <br>
+                    <label for="app_sdb_hash">Order Refrence </label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="order_uuid" value="{{ order.uuid }}" readonly>
+                    </div>
+                    <br>
+                    <p class='orange'>
+                        Please make payment using by SDB ID with order ID as payment refrence.
+                    </p>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="card" style="height: auto; width: auto;" >
+                <div class="card-header text-body">
+                    <h5>
+                        Address Update From
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+                    {{ form_end(form) }}
+
+                    <a class="btn btn-danger" href="{{ path('app_shopping_cart_view', { 'id': order.id }) }}" role="button">Canel Submit</a>
+                </div>
+            </div>
+        </div>
+
+        {% else %}
+        <hr>
+        <div class="row">
+            <h2 class="text-center orange">There is no item in Order!</h2>
+        </div>
+        {% endif %}
+</div>
+
+{% endblock %}

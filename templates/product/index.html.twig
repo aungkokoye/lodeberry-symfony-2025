@@ -4,7 +4,7 @@
 
 {% block banner %}
     <div class="d-flex justify-content-center align-items-center p-3" role="alert">
-        <a class="nav-link" href="{{ path('app_index') }}">
+        <a class="nav-link" href="{{ path('app_shopping_cart_checkout') }}">
             <i class="fa fa-shopping-basket  fa-2x" aria-hidden="true"></i>
             <span>click here for basket check out</span>
         </a>
@@ -27,7 +27,25 @@
                 <div class="card" style="height: 350px; width: auto;" >
                     <div class="card-header text-body"><h3>{{ product.name }}</h3></div>
                     <div class="card-body">
-                        <div> <b>Price: £{{ product.price/100 |number_format(2) }}</b> </div>
+                        <div> 
+                            <b>
+                                Price: £{{ product.price/100 |number_format(2) }} | 
+                                InCart: 
+                                <span id="{{ product.id }}-quantity">
+                                    {% if cart[product.id] is defined %}
+                                        {{ cart[product.id] }}
+                                    {% else %}
+                                        0
+                                    {% endif%}
+                                </span> |
+                                Total Amount : £
+                                    {% if cart[product.id] is defined %}
+                                        {{ (product.price/100 * cart[product.id]) |number_format(2) }}
+                                    {% else %}
+                                        0.00
+                                    {% endif%}
+                            </b> 
+                        </div>
                         <br>
                         <p>
                             {{ product.description |striptags|slice(0, 500)}}
@@ -38,9 +56,9 @@
                     </div>
                     <div class="card-footer">
                         <p class="justify-content-between">
-                            <button type="button" class="btn btn-primary">View</button>
+                            <a class="btn btn-primary" href="{{ path('app_product_view', { 'id': product.id }) }}" role="button">View</a>
                             <button type="button" class="btn btn-success cart-add" id="{{ product.id }}">Add to Basket</button>
-                            <span id="{{ product.id }}_message" ></span>
+                            <span id="{{ product.id }}-message" ></span>
                         </p>
                     </div>
                 </div>
