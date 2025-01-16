@@ -26,7 +26,6 @@ class ShoppingCartController extends AbstractController
     #[Route('/shopping-cart', name: 'app_shopping_cart')]
     public function index(Request $request, CartSessionStorage $cartSessionStorage): Response
     {
-        $cartSessionStorage->destroyShoppingCart();
         return $this->render('shopping_cart/index.html.twig', [
             'controller_name' => 'ShoppingCartController',
         ]);
@@ -108,7 +107,7 @@ class ShoppingCartController extends AbstractController
             try{
                 $cartManager->handleCartSubmit($order);
                 $cartSessionStorage->destroyShoppingCart();
-                if (empty($order->getProductOrders())) {
+                if (count($order->getProductOrders())) {
                     return $this->redirectToRoute('app_shopping_cart_view', ['id' => $order->getId()]);
                 } else {
                     return $this->redirectToRoute('app_shopping_cart_checkout');
@@ -157,5 +156,12 @@ class ShoppingCartController extends AbstractController
             'order'         => $order,
             'form'          => $form
         ]); 
+    }
+
+    #[Route('/shopping-cart-all-items-delete', name: 'app_shopping_cart_all_items_delete')]
+    public function deleteAllItemsInCart( CartSessionStorage $cartSessionStorage): Response
+    {
+        $cartSessionStorage->destroyShoppingCart();
+        return $this->redirectToRoute('app_shopping_cart_checkout');
     }
 }

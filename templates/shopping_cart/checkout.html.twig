@@ -61,7 +61,13 @@
 
                     {{ form_end(form) }}
 
-                    <a class="btn btn-danger" href="{{ path('app_shopping_cart_checkout')}}" role="button">Canel Submit</a>
+                    <a class="btn btn-danger" href="{{ path('app_shopping_cart_checkout')}}" role="button">Clear Forrm</a>
+                </div>
+            </div>
+            <br>
+            <div class="card" style="height: auto; width: auto;" >
+                <div class="card-body">
+                    <a class="btn btn-danger" href="{{ path('app_shopping_cart_all_items_delete')}}" role="button">Delete all items in shopping cart</a>
                 </div>
             </div>
         </div>

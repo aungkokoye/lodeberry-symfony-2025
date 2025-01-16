@@ -72,7 +72,7 @@
                     </div>
                     <br>
                     <p class='orange'>
-                        Please make payment using by SDB ID with order ID as payment refrence.
+                        <b> Please make payment via Spring Developing Bank by using SDB ID with order ID as payment refrence.</b>
                     </p>
                 </div>
             </div>
@@ -90,7 +90,7 @@
 
                     {{ form_end(form) }}
 
-                    <a class="btn btn-danger" href="{{ path('app_shopping_cart_view', { 'id': order.id }) }}" role="button">Canel Submit</a>
+                    <a class="btn btn-danger" href="{{ path('app_shopping_cart_view', { 'id': order.id }) }}" role="button">Clear Form</a>
                 </div>
             </div>
         </div>

@@ -20,10 +20,12 @@ class ProductOrderRepository extends ServiceEntityRepository
        public function findByOrder(Order $order): array
        {
            return $this->createQueryBuilder('po')
-               ->andWhere('po.orderRef = :order')
-               ->setParameter('order',$order)
-               ->getQuery()
-               ->getResult()
+                ->innerJoin('po.product', 'p') 
+                ->addSelect('p')
+                ->andWhere('po.orderRef = :order')
+                ->setParameter('order',$order)
+                ->getQuery()
+                ->getResult()
            ;
        }
 
