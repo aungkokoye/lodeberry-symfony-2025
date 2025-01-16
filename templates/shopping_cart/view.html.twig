@@ -80,7 +80,7 @@
             <br>
 
             <div class="card" style="height: auto; width: auto;" >
-                <div class="card-header text-body">
+                <div class="card-header bg-primary text-white text-center">
                     <h5>
                         Address Update From
                     </h5>
@@ -90,7 +90,10 @@
 
                     {{ form_end(form) }}
 
-                    <a class="btn btn-danger" href="{{ path('app_shopping_cart_view', { 'id': order.id }) }}" role="button">Clear Form</a>
+                    <!-- Clear Form Button -->
+                    <a class="btn btn-warning btn-block mt-3" href="{{ path('app_shopping_cart_checkout') }}" role="button">
+                        Clear Form
+                    </a>
                 </div>
             </div>
         </div>

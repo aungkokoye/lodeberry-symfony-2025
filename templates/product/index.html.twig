@@ -16,55 +16,55 @@
 <div class="container">
 
     {% for product in pagination %}
-        <div class="row">
-            <div class="col-4 col-md-4 col-sm-6">
+    <div class="row">
+        <div class="col-4 col-md-4 col-sm-6">
 
-                <img src="{{ asset('build/images/product/' ~ product.image) }}" alt="image" class="img-fluid"
-                     style="height: 350px; width: auto; object-fit: cover;" >
+            <img src="{{ asset('build/images/product/' ~ product.image) }}" alt="image" class="img-fluid"
+                 style="height: 350px; width: auto; object-fit: cover;" >
 
-            </div>
-            <div class="col-8 col-md-8 col-sm-6">
-                <div class="card" style="height: 350px; width: auto;" >
-                    <div class="card-header text-body"><h3>{{ product.name }}</h3></div>
-                    <div class="card-body">
-                        <div> 
-                            <b>
-                                Price: £{{ product.price/100 |number_format(2) }} | 
-                                InCart: 
-                                <span id="{{ product.id }}-quantity">
-                                    {% if cart[product.id] is defined %}
-                                        {{ cart[product.id] }}
-                                    {% else %}
-                                        0
-                                    {% endif%}
-                                </span> |
-                                Total Amount : £
-                                    {% if cart[product.id] is defined %}
-                                        {{ (product.price/100 * cart[product.id]) |number_format(2) }}
-                                    {% else %}
-                                        0.00
-                                    {% endif%}
-                            </b> 
-                        </div>
-                        <br>
-                        <p>
-                            {{ product.description |striptags|slice(0, 500)}}
-                            {% if product.description|length > 500 %}
-                                ... more
-                            {% endif %}
-                        </p>
+        </div>
+        <div class="col-8 col-md-8 col-sm-6">
+            <div class="card" style="height: 350px; width: auto;" >
+                <div class="card-header text-body"><h3>{{ product.name }}</h3></div>
+                <div class="card-body">
+                    <div> 
+                        <b>
+                            Price: £{{ product.price/100 |number_format(2) }} | 
+                            InCart: 
+                            <span id="{{ product.id }}-quantity">
+                                {% if cart[product.id] is defined %}
+                                    {{ cart[product.id] }}
+                                {% else %}
+                                    0
+                                {% endif%}
+                            </span> |
+                            Total Amount : £
+                                {% if cart[product.id] is defined %}
+                                    {{ (product.price/100 * cart[product.id]) |number_format(2) }}
+                                {% else %}
+                                    0.00
+                                {% endif%}
+                        </b> 
                     </div>
-                    <div class="card-footer">
-                        <p class="justify-content-between">
-                            <a class="btn btn-primary" href="{{ path('app_product_view', { 'id': product.id }) }}" role="button">View</a>
-                            <button type="button" class="btn btn-success cart-add" id="{{ product.id }}">Add to Basket</button>
-                            <span id="{{ product.id }}-message" ></span>
-                        </p>
-                    </div>
+                    <br>
+                    <p>
+                        {{ product.description |striptags|slice(0, 500)}}
+                        {% if product.description|length > 500 %}
+                            ... more
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <p class="justify-content-between">
+                        <a class="btn btn-primary" href="{{ path('app_product_view', { 'id': product.id }) }}" role="button">View</a>
+                        <button type="button" class="btn btn-success cart-add" id="{{ product.id }}">Add to Basket</button>
+                        <span id="{{ product.id }}-message" ></span>
+                    </p>
                 </div>
             </div>
         </div>
-        <hr>
+    </div>
+    <hr>
     {% endfor %}
 
     <div class="row">

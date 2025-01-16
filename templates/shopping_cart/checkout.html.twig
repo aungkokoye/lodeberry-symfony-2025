@@ -17,29 +17,36 @@
 
             {% set totalAmount = totalAmount + ((cart[product.id] * product.price) / 100) %}
             
-            <div class="row">
+            <div class="row align-items-center mb-4 shadow-sm p-3 bg-white rounded">
+                <!-- Product Image -->
                 <div class="col-4 col-md-4 col-sm-6">
-                    <img src="{{ asset('build/images/product/' ~ product.image) }}" alt="image" class="img-fluid"
-                     style="height: 200px; width: auto; object-fit: cover;" >
+                    <img src="{{ asset('build/images/product/' ~ product.image) }}" alt="Product Image" 
+                         class="img-fluid rounded" style="height: 200px; width: auto; object-fit: cover;">
                 </div>
+            
+                <!-- Product Details -->
                 <div class="col-8 col-md-8 col-sm-6">
-                    <div class="card" style="height: 200px; width: auto;" >
-                        <div class="card-header text-body"><h5>{{ product.name }}</h3></div>
-                        <div class="card-body">
-                            <div> <b>Price: £ {{ product.price/100 |number_format(2) }}</b> </div>
-                            <div> <b>Total Amount: £ {{ (cart[product.id] * product.price) / 100 | number_format(2)}}</b> </div>
-                            <br>
-                            <div class="btn-group" role="group" aria-label="Basic example">
-                                <button type="button" id="{{ product.id }}" class="btn btn-sm btn-primary cart-minute"> - </button>
-                                <button type="button" class="btn btn-sm btn-info"> 
+                    <h5 class="text-primary m-0">{{ product.name }}</h5>
+                    <hr>
+                    <div class="card border-0">
+                        <div class="card-body py-2 px-0">
+                            <!-- Price and Total Amount -->
+                            <p class="mb-2"><strong>Price:</strong> £ {{ product.price/100 | number_format(2) }}</p>
+                            <p class="mb-3"><strong>Total Amount:</strong> £ {{ (cart[product.id] * product.price) / 100 | number_format(2) }}</p>
+            
+                            <!-- Quantity Controls -->
+                            <div class="btn-group" role="group" aria-label="Quantity Controls">
+                                <button type="button" id="{{ product.id }}" class="btn btn-sm btn-outline-primary cart-minute"> - </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger disabled"> 
                                     <span id="{{ product.id }}-quantity">
                                         {{ cart[product.id] }}
                                     </span>
                                 </button>
-                                <button type="button" id="{{ product.id }}" class="btn btn-sm btn-primary cart-add">+</button>
+                                <button type="button" id="{{ product.id }}" class="btn btn-sm btn-outline-primary cart-add"> + </button>
                             </div>
-                            <br>
-                            <span id="{{ product.id }}-message" ></span>
+                        </div>
+                        <div class="card-footer bg-transparent border-top-0 p-0 mt-2">
+                            <span id="{{ product.id }}-message" class="text-danger small"></span>
                         </div>
                     </div>
                 </div>
@@ -49,25 +56,30 @@
 
         </div>
 
-        <div class="col-4 col-md-4 col-sm-6">
-            <div class="card" style="height: auto; width: auto;" >
-                <div class="card-header text-body">
-                    <h5>
-                        Total Amount: £ <span id="cart-total-amount"> {{totalAmount}} </span>
-                    </h5>
+        <div class="col-12 col-md-4">
+            <!-- Total Amount Card -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white text-center">
+                    <h5>Total Amount: £ <span id="cart-total-amount">{{ totalAmount }}</span></h5>
                 </div>
                 <div class="card-body">
+                    <!-- Form -->
                     {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-
                     {{ form_end(form) }}
-
-                    <a class="btn btn-danger" href="{{ path('app_shopping_cart_checkout')}}" role="button">Clear Forrm</a>
+        
+                    <!-- Clear Form Button -->
+                    <a class="btn btn-warning btn-block mt-3" href="{{ path('app_shopping_cart_checkout') }}" role="button">
+                        Clear Form
+                    </a>
                 </div>
             </div>
-            <br>
-            <div class="card" style="height: auto; width: auto;" >
-                <div class="card-body">
-                    <a class="btn btn-danger" href="{{ path('app_shopping_cart_all_items_delete')}}" role="button">Delete all items in shopping cart</a>
+        
+            <!-- Delete All Items Card -->
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <a class="btn btn-danger btn-block" href="{{ path('app_shopping_cart_all_items_delete') }}" role="button">
+                        Delete All Items in Shopping Cart
+                    </a>
                 </div>
             </div>
         </div>
