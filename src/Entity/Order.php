@@ -34,7 +34,7 @@ class Order
     #[Assert\NotBlank()]
     #[Assert\Length(
         min: 20,
-        max: 200,
+        max: 500,
         minMessage: 'Your address cannot be shorter than {{ limit }} characters.',
         maxMessage: 'Your address cannot be longer than {{ limit }} characters.'
     )]
