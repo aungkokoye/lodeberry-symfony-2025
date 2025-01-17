@@ -6,6 +6,7 @@ use App\Entity\Order;
 use App\Order\Form\AdminOrderUpdateType;
 use App\Order\Form\AdminOrderViewType;
 use App\Repository\OrderRepository;
+use App\Repository\ProductOrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -68,12 +69,14 @@ class OrderController extends AbstractController
     public function adminOrderUpdate(
         Request $request,
         OrderRepository $orderRepository,
+        ProductOrderRepository $productOrderRepository,
         Order $order,
         EntityManagerInterface $em,
     ): Response {
 
         $form =  $form = $this->createForm(AdminOrderUpdateType::class, $order);
         $form->handleRequest($request);
+        $productOrders = $productOrderRepository->findByOrder($order);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $order->getUpdatedAt(new \DateTime());
@@ -89,8 +92,9 @@ class OrderController extends AbstractController
         }
 
         return $this->render('order/admin_order_update.html.twig', [
-            'form' => $form,
-            'order'=> $order
+            'form'          => $form,
+            'order'         => $order,
+            'productOrders' => $productOrders
         ]);
     }
 }
