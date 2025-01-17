@@ -26,7 +26,11 @@
             
                 <!-- Product Details -->
                 <div class="col-8 col-md-8 col-sm-6">
-                    <h5 class="text-primary m-0">{{ product.name }}</h5>
+                    <h5 class="text-primary m-0" >
+                        <a  href="{{ path('app_product_view', { 'id': product.id }) }}" style="text-decoration: none;"> 
+                            {{ product.name }} 
+                        </a>
+                    </h5>
                     <hr>
                     <div class="card border-0">
                         <div class="card-body py-2 px-0">
