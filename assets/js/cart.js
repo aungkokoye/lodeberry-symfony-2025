@@ -35,6 +35,7 @@ document.addEventListener('turbo:load', function() {
         const message = 'Fail to set to shopping cart.';
         const messageDiv = $('#' + productId + '-message');
         const quatantityDiv = $('#' + productId + '-quantity');
+        const productTotalAmountDiv = $('#' + productId + '-total-amount');
         const totalAmountDiv = $('#cart-total-amount')
         $.ajax({
             url: '/shopping-cart-set', // The URL to send the data to
@@ -48,8 +49,13 @@ document.addEventListener('turbo:load', function() {
                 }
                 if (totalAmountDiv) {
                     let totalAmount =  totalAmountDiv.text();
-                    totalAmount = parseFloat(totalAmount).toFixed(2) + response.adjustToatlAmount;
-                    totalAmountDiv.text(totalAmount);
+                    totalAmount = parseFloat(parseFloat(totalAmount.trim()).toFixed(2)) + response.adjustToatlAmount;
+                    totalAmountDiv.text(parseFloat(totalAmount).toFixed(2));
+                }
+                if (productTotalAmountDiv) {
+                    let productTotalAmount =  productTotalAmountDiv.text();
+                    productTotalAmount = parseFloat(parseFloat(productTotalAmount.trim()).toFixed(2)) + response.adjustToatlAmount;
+                    productTotalAmountDiv.text(parseFloat(productTotalAmount).toFixed(2));
                 }
             },
             error: function(xhr, status, error) {

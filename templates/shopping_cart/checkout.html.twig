@@ -32,7 +32,10 @@
                         <div class="card-body py-2 px-0">
                             <!-- Price and Total Amount -->
                             <p class="mb-2"><strong>Price:</strong> £ {{ product.price/100 | number_format(2) }}</p>
-                            <p class="mb-3"><strong>Total Amount:</strong> £ {{ (cart[product.id] * product.price) / 100 | number_format(2) }}</p>
+                            <p class="mb-3"><strong>Total Amount:</strong> £ <span id="{{ product.id }}-total-amount">
+                                {{ (cart[product.id] * product.price) / 100 | number_format(2) }}
+                                </span>
+                            </p>
             
                             <!-- Quantity Controls -->
                             <div class="btn-group" role="group" aria-label="Quantity Controls">

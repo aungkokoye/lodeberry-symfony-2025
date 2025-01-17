@@ -38,12 +38,13 @@
                                     0
                                 {% endif%}
                             </span> |
-                            Total Amount : £
+                            Total Amount : £ <span id="{{ product.id }}-total-amount">
                                 {% if cart[product.id] is defined %}
                                     {{ (product.price/100 * cart[product.id]) |number_format(2) }}
                                 {% else %}
                                     0.00
                                 {% endif%}
+                        </span>
                         </b> 
                     </div>
                     <br>
