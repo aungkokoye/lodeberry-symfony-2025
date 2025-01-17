@@ -53,6 +53,7 @@
         </div>
 
         <div class="col-4 col-md-4 col-sm-6">
+            
             <div class="card" style="height: auto; width: auto;" >
                 <div class="card-header text-body">
                     <h4 class="orange">
@@ -66,6 +67,7 @@
                         Total Items: {{totalItems}} 
                     </h5>
                 </div>
+                {% if order.status == 0 %}
                 <div class="card-body form-group">
                     <label for="app_sdb_hash">SDB (Spring Development Bank) Payment ID</label>
                     <div class="input-group">
@@ -81,10 +83,12 @@
                         <b> Please make payment via Spring Developing Bank by using SDB ID with order ID as payment refrence.</b>
                     </p>
                 </div>
+                {% endif %}
             </div>
 
             <br>
 
+            {% if order.status < 2 %}
             <div class="card" style="height: auto; width: auto;" >
                 <div class="card-header bg-primary text-white text-center">
                     <h5>
@@ -102,6 +106,7 @@
                     </a>
                 </div>
             </div>
+            {% endif %}
         </div>
 
         {% else %}
