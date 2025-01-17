@@ -14,9 +14,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Order
 {
     const ORDER_CREATE_STATUS = 0;
+    const PAYMENT_RECEIVED_STATUS = 1;
+    const ORDER_PROCESSING_STATUS = 2;
 
     const ORDER_STATUS_ARRAY = [
-        0 => 'order received'
+        0 => 'order received',
+        1 => 'payment received',
+        2 => 'orde processing'
     ];
 
     #[ORM\Id]
@@ -47,6 +51,7 @@ class Order
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updatedAt = null;
 
+    #[Assert\NotBlank()]
     #[ORM\Column]
     private int $status = 0;
 

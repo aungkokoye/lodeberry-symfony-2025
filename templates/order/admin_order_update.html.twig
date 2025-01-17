@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Order Update{% endblock %}
+
+{% block body %}
+<div class='container'>
+    <div class="row">
+        {% for message in app.flashes('admin-order-update-success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    <div class="row">
+        {{ form_errors(form) }}
+    </div>
+    <div class="row">
+        
+        <div class="card" >
+            <div class="card-header text-body">
+                <h5> Update Order Form</h5>
+            </div>
+            <div class="card-body row">
+
+                <div class="col-5 col-md-5 col-sm-5">
+                    <h6 class="text-muted">Order Details</h6>
+                    <br>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <strong>UUID:</strong> {{ order.uuid }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Order By:</strong> {{ order.OrderBy.email }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Ordered At:</strong> {{ order.createdAt | date("d M Y (H:i:s)") }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Updated At:</strong> {{ order.updatedAt | date("d M Y (H:i:s)") }}
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-1 col-md-1 col-sm-1">
+                </div>
+
+                <div class="col-6 col-md-6 col-sm-6">
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+                {{ form_end(form) }}
+                </div>
+            </div>
+   
+        </div>
+            
+    </div>
+    <hr>
+</div>
+
+{% endblock %}

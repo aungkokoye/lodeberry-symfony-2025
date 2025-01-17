@@ -12,6 +12,7 @@ use App\Service\MailerManager;
 use App\Service\UserManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -241,6 +242,45 @@ class RegistrationController extends AbstractController
 
         return $this->render('registration/reset_password_email.html.twig', [
             'form' => $form,
+        ]);
+    }
+
+    #[Route(path: '/user-password-change', name: 'app_user_password_change')]
+    public function userPasswordChange(
+        Request $request,
+        UserPasswordHasherInterface $userPasswordHasher,
+        EntityManagerInterface $em,
+    ): Response {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        /** @var User $user */
+        $user = $this->getUser();
+        $form = $this->createForm(ResetPasswordFormType::class);
+
+        if (!$user instanceof User) {
+            $form->addError(new FormError('You need to login!'));
+        }
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $pass = $form->get('plainPassword')->getData();
+            $user->setPassword($userPasswordHasher->hashPassword($user, $pass));
+            $user->setHashExpired(new \DateTime());
+            $em->persist($user);
+            $em->flush();
+
+            $this->addFlash(
+                'user-reset-password-success',
+                "Password is rested successfully!"
+            );
+
+            return $this->redirectToRoute('app_user_password_change');
+        }
+
+        return $this->render('security/user_password_change.html.twig', [
+            'form' => $form
         ]);
     }
 }

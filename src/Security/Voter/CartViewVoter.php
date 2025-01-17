@@ -26,6 +26,7 @@ final class CartViewVoter extends Voter
         
         switch ($attribute) {
             case self::VIEW:
+                /** @var User $user */
                 return $subject->getOrderBy()->getId() === $user->getId();
                 break;
         }

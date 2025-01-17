@@ -8,12 +8,34 @@
     <hr>
     <br>
     <div class="row">
-        <div class="col-md-4 mb-5">
+        <div class="col-md-3 mb-5">
             <a class="nav-link text-primary" href="{{ path('app_order')}}">
                 <i class="fa fa-archive fa-3x"></i> Your Order List
             </a>
         </div>
+        <div class="col-md-3 mb-5">
+            <a class="nav-link text-primary" href="{{ path('app_user_password_change')}}">
+                <i class="fa fa-user-circle-o fa-3x"></i> Password Change
+            </a>
+        </div>
     </div>
+
+    {% if is_granted('ROLE_ADMIN') %}
+
+    <hr>
+    <hr>
+
+    <br>
+    <div class="row">
+        <div class="col-md-3 mb-5">
+            <a class="nav-link text-secondary" href="{{ path('app_admin_order_view')}}">
+                <i class="fa fa-th fa-3x"></i> Admin Order View/Update
+            </a>
+        </div>
+    </div>
+
+    {% endif %}
+
 </div>
 
 {% endblock %}
