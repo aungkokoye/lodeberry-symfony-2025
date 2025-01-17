@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Order List{% endblock %}
+
+{% block body %}
+
+    <div class='container'>
+        {% for order in pagination %}
+        {% set totalAmount = 0 %}
+        {% set totalItems = 0 %}
+            {% for productOrder in order.productOrders %}
+            {% set totalAmount = totalAmount + (productOrder.quantity * productOrder.product.price) / 100 | number_format(2) %}
+            {% set totalItems = totalItems + productOrder.quantity %}
+            {% endfor %}
+
+            <div class="card mb-4 shadow-sm border-0">
+                <div class="card-header bg-light text-dark py-3">
+                    <h5 class="mb-1">
+                        Order ID: <span class="text-primary">{{ order.id }}</span>
+                    </h5>
+                    <h5 class="mb-0">
+                        Order Status: <span class="badge bg-warning text-dark">{{ order.orderStatus }}</span>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <strong>Total Items:</strong> {{ totalItems }}
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Total Amount:</strong> £ {{ totalAmount }}
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Ordered At:</strong> {{ order.createdAt | date("d M Y (H:i:s)") }}
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Updated At:</strong> {{ order.updatedAt | date("d M Y (H:i:s)") }}
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Need Space between 2 column -->
+                        <div class="col-md-2">
+                        </div>
+
+                        <div class="col-md-6">
+                            <b>Delivery Address</b>
+                            <br><br>
+                            <div class="p-3 border rounded bg-light">
+                                <p class="text-muted mb-0">
+                                    {{ order.address }}
+                                </p>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="card-footer bg-light text-end">
+                    <a 
+                        class="btn btn-primary btn-sm px-4" 
+                        href="{{ path('app_shopping_cart_view', { 'id': order.id }) }}" 
+                        role="button">
+                        View Details
+                    </a>
+                </div>
+            </div>
+            <hr>
+            
+        {% endfor %}
+
+        <div class="row">
+            <div class="navigation d-flex justify-content-center align-items-center">
+                {{ knp_pagination_render(pagination) }}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

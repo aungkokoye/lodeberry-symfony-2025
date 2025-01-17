@@ -23,14 +23,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ShoppingCartController extends AbstractController
 {
-    #[Route('/shopping-cart', name: 'app_shopping_cart')]
-    public function index(Request $request, CartSessionStorage $cartSessionStorage): Response
-    {
-        return $this->render('shopping_cart/index.html.twig', [
-            'controller_name' => 'ShoppingCartController',
-        ]);
-    }
-
     #[Route('/shopping-cart-set', name: 'app_shopping_cart_set', methods: ['POST'])]
     public function addItem(
         Request $request,

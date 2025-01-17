@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Order;
 use App\Entity\ProductOrder;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -24,6 +25,20 @@ class ProductOrderRepository extends ServiceEntityRepository
                 ->addSelect('p')
                 ->andWhere('po.orderRef = :order')
                 ->setParameter('order',$order)
+                ->getQuery()
+                ->getResult()
+           ;
+       }
+
+       public function findByUser(User $user): array
+       {
+           return $this->createQueryBuilder('po')
+                ->innerJoin('po.product', 'p') 
+                ->addSelect('p')
+                ->innerJoin('po.orderRef', 'o') 
+                ->addSelect('o')
+                ->andWhere('o.orderBy = :orderBy')
+                ->setParameter('orderBy', $user)
                 ->getQuery()
                 ->getResult()
            ;
