@@ -1,0 +1,7 @@
+<span id="{{ product.id }}-quantity">
+    {% if cart[product.id] is defined %}
+        {{ cart[product.id] }}
+    {% else %}
+        0
+    {% endif%}
+</span>

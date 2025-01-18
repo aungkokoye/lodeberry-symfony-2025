@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Product{% endblock %}
+
+{% block banner %}
+    
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <br>
+    <h5> Search Form </h5>
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation', 'data-turbo': 'false'}}) }}
+    <!-- Form Row 1 -->
+    <div class="row">
+        <div class="col-md-4">
+            {{ form_row(form.search, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_row(form.active, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="col-md-4">
+            <input type="submit" class="btn btn-lg btn-primary" value="Search">
+            <a class="btn btn-success btn-lg " href="#" role="button">
+                Add New Product
+            </a>
+        </div>
+    </div>            
+
+    {{ form_end(form) }}        
+
+    <hr>
+
+    {% if pagination is defined and pagination|length > 0 %}
+   
+        {% for product in pagination %}
+        <div class="row mb3">
+            <div class="col-4 col-md-4 col-sm-6">
+                {% include '/component/image/product.html.twig' with {'imageHeight': '200px', 'product' : product} %}
+            </div>
+
+            <div class="col-8 col-md-8 col-sm-6">
+                <div class="card" style="height: 200px; width: auto;" >
+                    <div class="card-header text-body"><h3>{{ product.name }}</h3></div>
+                    <div class="card-body">
+                        <div> 
+                            <b>
+                                Price: {% include '/component/match/price.html.twig' with {'price': product.price} %} | 
+                                {% if product.active %} 
+                                    <span class='text-success'> Is Active: YES </span>
+                                {% else %}
+                                    <span class='text-danger'> Is Active: No </span>
+                                {% endif%}  
+                            </b> 
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <p class="justify-content-between">
+                            <a class="btn btn-small btn-primary" href="{{ path('app_product_view', { 'id': product.id }) }}" role="button"> Update </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+
+        <hr>
+
+        {% endfor %}
+
+    {% include '/component/pagination.html.twig'%}
+
+    {% else %}
+        <p>No products found.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

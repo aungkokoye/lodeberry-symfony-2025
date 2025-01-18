@@ -20,8 +20,7 @@
             <div class="row align-items-center mb-4 shadow-sm p-3 bg-white rounded">
                 <!-- Product Image -->
                 <div class="col-4 col-md-4 col-sm-6">
-                    <img src="{{ asset('build/images/product/' ~ product.image) }}" alt="Product Image" 
-                         class="img-fluid rounded" style="height: 200px; width: auto; object-fit: cover;">
+                    {% include '/component/image/product.html.twig' with {'product': product, 'imageHeight' : '200px'} %}
                 </div>
             
                 <!-- Product Details -->
@@ -35,10 +34,11 @@
                     <div class="card border-0">
                         <div class="card-body py-2 px-0">
                             <!-- Price and Total Amount -->
-                            <p class="mb-2"><strong>Price:</strong> £ {{ product.price/100 | number_format(2) }}</p>
-                            <p class="mb-3"><strong>Total Amount:</strong> £ <span id="{{ product.id }}-total-amount">
-                                {{ (cart[product.id] * product.price) / 100 | number_format(2) }}
-                                </span>
+                            <p class="mb-2"><strong>Price:</strong> 
+                                {% include '/component/match/price.html.twig' with {'price': product.price} %} 
+                            </p>
+                            <p class="mb-3"><strong>Total Amount:</strong>
+                                {% include '/component/match/total_amount.html.twig' with {'product': product, 'cart' : cart} %}
                             </p>
             
                             <!-- Quantity Controls -->
@@ -97,7 +97,7 @@
 {% else %}
 <hr>
 <div class="row">
-    <h2 class="text-center orange">There is no item in shopping cart !</h2>
+    <h2 class="text-center orange"> There is no item in shopping cart ! </h2>
 </div>
 {% endif %}
 

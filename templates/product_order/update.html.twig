@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ProductOrder Update{% endblock %}
+
+{% block body %}
+<div class='container'>
+    <div class="row card">
+        <div class="card-header text-body d-flex align-items-center">
+            <span class="fw-bold">Order Quantity Update Form</span>
+            <a 
+                class="btn btn-sm btn-warning ms-auto" 
+                href="{{ path('app_admin_order_update', { 'id' : productOrder.orderRef.id })}}" 
+                style="text-decoration: none;">
+                Back To Order Update Form
+            </a>
+        </div>
+
+        <div class="card-body row">
+            <div class="col-4">
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'data-turbo': 'false'}}) }}
+
+            {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+    <hr>
+</div>
+
+{% endblock %}

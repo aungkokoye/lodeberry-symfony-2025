@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ProductOrderRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductOrderRepository::class)]
 class ProductOrder
@@ -23,6 +24,11 @@ class ProductOrder
     #[ORM\JoinColumn(nullable: false)]
     private ?Order $orderRef = null;
 
+    #[Assert\Range(
+        min: 0,
+        max: 200,
+        notInRangeMessage: "You must be between 0 and 200 to enter."
+    )]
     #[ORM\Column]
     private ?int $quantity = null;
 

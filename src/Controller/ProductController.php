@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Order\Form\AdminProductSearchType;
 use App\Repository\ProductRepository;
 use App\Storage\CartSessionStorage;
 use Knp\Component\Pager\PaginatorInterface;
@@ -21,7 +22,7 @@ class ProductController extends AbstractController
         CartSessionStorage $cartSessionStorage
     ): Response{
         $query = $productRepository->createQueryBuilder('p')
-            ->where('p.active = :active')
+            ->andWhere('p.active = :active')
             ->setParameter('active', true)
         ;
 
@@ -42,6 +43,51 @@ class ProductController extends AbstractController
     {
         return $this->render('product/view.html.twig', [
             'product' => $product,
+        ]);
+    }
+
+    #[Route('/admin/product', name: 'app_admin_product')]
+    public function adminList(
+        Request $request,
+        ProductRepository $productRepository,
+        PaginatorInterface $paginator,
+    ): Response {
+
+        $form = $this->createForm(AdminProductSearchType::class);
+        $form->handleRequest($request);
+
+        $query = $productRepository->createQueryBuilder('p');
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $search = $form->get('search')->getData();
+            $active = $form->get('active')->getData();
+            
+            if (!empty($search)) {
+                $query = $query->andWhere(
+                    $query->expr()->like('p.name', ':name')
+                )
+                ->setParameter('name', '%' . $search . '%');
+            }
+
+            if ($active === null) {
+                $query = $query->andWhere('p.active IN (:active)')
+                    ->setParameter('active', [0, 1]);
+            } else {
+                $query = $query->andWhere('p.active = :active')
+                    ->setParameter('active', $active);
+            }
+        }
+
+        $pagination = $paginator->paginate(
+            $query, /* query NOT result */
+            $request->query->getInt('page', 1), /* page number */
+            5 /* limit per page */
+        );
+        
+
+        return $this->render('product/admin_index.html.twig', [
+            'form'       => $form,
+            'pagination' => $pagination
         ]);
     }
 }
