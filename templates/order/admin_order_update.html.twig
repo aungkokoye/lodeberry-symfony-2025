@@ -7,7 +7,7 @@
 {% set totalAmount = 0 %}
 {% set totalItems = 0 %}
 {% for productOrder in order.productOrders %}
-    {% set totalAmount = totalAmount + (productOrder.quantity * productOrder.product.price) / 100 | number_format(2) %}
+    {% set totalAmount = totalAmount + (productOrder.quantity * productOrder.product.price) | number_format(2) %}
     {% set totalItems = totalItems + productOrder.quantity %}
 {% endfor %}
 
@@ -49,7 +49,7 @@
                                     <p class="mb-2"><strong>Quantity:</strong> 
                                         {{ productOrder.Quantity}}  <a  href="{{ path('app_admin_product_order_update', { 'id' : productOrder.id })}}" style="text-decoration: none;"> (quantity update) </a>
                                     </p>
-                                    <p class="mb-2"><strong>Total Amount:</strong> £ {{ (productOrder.product.price/100 * productOrder.Quantity) | number_format(2) }}</p>
+                                    <p class="mb-2"><strong>Total Amount:</strong> £ {{ (productOrder.product.price * productOrder.Quantity) | number_format(2) }}</p>
                                 </div>
                             </div>
                         </div>           

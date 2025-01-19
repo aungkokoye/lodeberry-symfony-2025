@@ -18,7 +18,7 @@
         <div class="col-8 col-md-8 col-sm-6">
             {% for productOrder in productOrders %}
 
-            {% set totalAmount = totalAmount + (productOrder.quantity * productOrder.product.price) / 100 | number_format(2) %}
+            {% set totalAmount = totalAmount + (productOrder.quantity * productOrder.product.price) | number_format(2) %}
             {% set totalItems = totalItems + productOrder.quantity %}
 
             <div class="row">
@@ -37,7 +37,7 @@
                         <div class="card-body">
                             <div> <b>Price: {% include '/component/match/price.html.twig' with {'price': productOrder.product.price} %} </b> </div>
                             <div> <b>Quantity: {{ productOrder.quantity }} </b> </div>
-                            <div> <b>Total Amount: £ {{ (productOrder.quantity * productOrder.product.price) / 100 | number_format(2)}}</b> </div>
+                            <div> <b>Total Amount: £ {{ (productOrder.quantity * productOrder.product.price) | number_format(2)}}</b> </div>
                         </div>
                     </div>
                 </div>

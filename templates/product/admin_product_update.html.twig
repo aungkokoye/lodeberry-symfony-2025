@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Product Update {% endblock %}
+
+
+{% block body %}
+
+<div class="container">
+    {% include '/component/message/form_error.html.twig' with {'form': form} %}
+    {% include '/component/message/fail.html.twig' with {'key': 'admin-product-update-error'} %}
+    <class class='card row'>
+        <div class="card-header">
+            <b> Product Update Form </b>
+        </div>
+        <div class="card-body">
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'data-turbo': 'false'}}) }}
+            <div class='row'>
+                <div class='class="col-4 col-md-4 col-sm-4'>
+                    {{ form_row(form.name) }}
+                    {{ form_row(form.price) }}
+                    {{ form_row(form.active) }}
+                    <br> <br>
+                    {{ form_row(form.save) }}
+                </div>
+                <div class='class="col-4 col-md-4 col-sm-4'>
+                    {{ form_row(form.description) }}
+                </div>
+                <div class='class="col-4 col-md-4 col-sm-4'>
+                    <b> current image </b> <br>
+                    {% include '/component/image/product.html.twig' with {'imageHeight': '150px', 'product' : product} %}
+                    <br><br>
+                    {{ form_row(form.imageFile) }}
+                    <p class='text-warning'> ** Please upload the image if you want to replace current one.<p>
+                <div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

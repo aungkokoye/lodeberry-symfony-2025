@@ -9,7 +9,7 @@
         {% set totalAmount = 0 %}
         {% set totalItems = 0 %}
             {% for productOrder in order.productOrders %}
-            {% set totalAmount = totalAmount + (productOrder.quantity * productOrder.product.price) / 100 | number_format(2) %}
+            {% set totalAmount = totalAmount + (productOrder.quantity * productOrder.product.price)  | number_format(2) %}
             {% set totalItems = totalItems + productOrder.quantity %}
             {% endfor %}
 

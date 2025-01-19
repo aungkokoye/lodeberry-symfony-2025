@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Product Create {% endblock %}
+
+
+{% block body %}
+
+<div class="container">
+    {% include '/component/message/form_error.html.twig' with {'form': form} %}
+    {% include '/component/message/fail.html.twig' with {'key': 'admin-product-create-error'} %}
+    <class class='card row'>
+        <div class="card-header">
+            <b> Product Create Form </b>
+        </div>
+        <div class="card-body">
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'data-turbo': 'false'}}) }}
+            <div class='row'>
+                <div class='class="col-4 col-md-4 col-sm-6'>
+                    {{ form_row(form.name) }}
+                    {{ form_row(form.price) }}
+                    {{ form_row(form.active) }}
+                    {{ form_row(form.imageFile) }}
+                </div>
+                <div class='class="col-1 col-md-1 col-sm-0'>
+                </div>
+                <div class='class="col-4 col-md-4 col-sm-6'>
+                    {{ form_row(form.description) }}
+                </div>
+            </div>
+            <br>
+            <div class='row'>
+                {{ form_row(form.save) }}
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+
+{% endblock %}

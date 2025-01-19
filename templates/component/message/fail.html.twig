@@ -1,0 +1,7 @@
+<div class="row">
+    {% for message in app.flashes(key) %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
+</div>

@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ProductRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
@@ -14,15 +15,29 @@ class Product
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(type: Types::GUID)]
+    private ?string $uuid = null;
+
+    #[Assert\NotBlank()]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Assert\NotBlank()]
+    #[Assert\Range(
+        min: 0,
+        max: 20000,
+        notInRangeMessage: "You must be between 0 and 20000 to enter."
+    )]
     #[ORM\Column]
     private ?int $price = null;
 
     #[ORM\Column]
     private ?bool $active = true;
 
+    #[Assert\Length(
+        max: 1000,
+        maxMessage: 'Your description cannot be longer than {{ limit }} characters.',
+    )]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
@@ -46,14 +61,15 @@ class Product
         return $this;
     }
 
-    public function getPrice(): ?int
+    public function getPrice(): ?float
     {
-        return $this->price;
+        $price = $this->price/100;
+        return (float) number_format($price , 2, '.', '');
     }
 
-    public function setPrice(int $price): static
+    public function setPrice($price): static
     {
-        $this->price = $price;
+        $this->price = $price * 100;
 
         return $this;
     }
@@ -82,6 +98,8 @@ class Product
         return $this;
     }
 
+    
+
     public function getActive(): ?bool
     {
         return $this->active;
@@ -90,6 +108,21 @@ class Product
     public function setActive(?bool $active): static
     {
         $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of uuid
+     */ 
+    public function getUuid(): string
+    {
+        return $this->uuid;
+    }
+
+    public function setUuid(string $uuid): self
+    {
+        $this->uuid = $uuid;
 
         return $this;
     }

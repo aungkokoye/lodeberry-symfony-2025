@@ -1,6 +1,6 @@
 £ <span id="{{ product.id }}-total-amount">
     {% if cart[product.id] is defined %}
-        {{ (product.price/100 * cart[product.id]) |number_format(2) }}
+        {{ (product.price * cart[product.id])  }}
     {% else %}
         0.00
     {% endif%}

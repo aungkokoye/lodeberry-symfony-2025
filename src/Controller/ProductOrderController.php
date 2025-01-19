@@ -26,8 +26,8 @@ class ProductOrderController extends AbstractController
             $em->flush();
 
             $this->addFlash(
-                'admin-order-quantity-update-success',
-                "Successfully updated order quantity."
+                'admin-order-update-success',
+                "Successfully updated order quantity for {$productOrder->getProduct()->getName()}."
             );
 
             return $this->redirectToRoute('app_admin_order_update', [

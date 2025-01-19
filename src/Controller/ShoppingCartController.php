@@ -61,7 +61,7 @@ class ShoppingCartController extends AbstractController
            return new JsonResponse([
                'status'             => 'success',
                'quantity'           => $upadtedQuality,
-               'adjustToatlAmount'  => ($upadtedQuality - $quantity) * ($product->getPrice()/ 100),
+               'adjustToatlAmount'  => ($upadtedQuality - $quantity) * ($product->getPrice()),
                'message'            => sprintf(
                             "Successfully set to shopping cart. (Total: %d )",
                                     $cartSessionStorage->getItemQuantity($productID)
