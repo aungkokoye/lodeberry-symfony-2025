@@ -3,7 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Product;
-use App\Order\Form\AdminProductSearchType;
+use App\Product\Form\AdminProductSearchType;
+use App\Product\Form\ProductSearchType;
 use App\Product\Form\ProductType;
 use App\Repository\ProductRepository;
 use App\Storage\CartSessionStorage;
@@ -27,10 +28,22 @@ class ProductController extends AbstractController
         PaginatorInterface $paginator,
         CartSessionStorage $cartSessionStorage
     ): Response{
+        $form = $this->createForm(ProductSearchType::class);
+        $form->handleRequest($request);
         $query = $productRepository->createQueryBuilder('p')
             ->andWhere('p.active = :active')
             ->setParameter('active', true)
         ;
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $search = $form->get('search')->getData();
+            if (!empty($search)) {
+                $query = $query->andWhere(
+                    $query->expr()->like('p.name', ':name')
+                )
+                ->setParameter('name', '%' . $search . '%');
+            }
+        }
 
         $pagination = $paginator->paginate(
             $query, /* query NOT result */
@@ -40,7 +53,8 @@ class ProductController extends AbstractController
 
         return $this->render('product/index.html.twig', [
             'pagination' => $pagination,
-            'cart'       => $cartSessionStorage->getCart()
+            'cart'       => $cartSessionStorage->getCart(),
+            'form'       => $form
         ]);
     }
 
@@ -59,8 +73,30 @@ class ProductController extends AbstractController
         PaginatorInterface $paginator,
     ): Response {
 
+        $form = $this->createForm(AdminProductSearchType::class);
+        $form->handleRequest($request);
+
         $query = $productRepository->createQueryBuilder('p');
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $search = $form->get('search')->getData();
+            $active = $form->get('active')->getData();
+            
+            if (!empty($search)) {
+                $query = $query->andWhere(
+                    $query->expr()->like('p.name', ':name')
+                )
+                ->setParameter('name', '%' . $search . '%');
+            }
+
+            if ($active === null) {
+                $query = $query->andWhere('p.active IN (:active)')
+                    ->setParameter('active', [0, 1]);
+            } else {
+                $query = $query->andWhere('p.active = :active')
+                    ->setParameter('active', $active);
+            }
+        }
 
         $pagination = $paginator->paginate(
             $query, /* query NOT result */
@@ -68,7 +104,9 @@ class ProductController extends AbstractController
             5 /* limit per page */
         );
         
+
         return $this->render('product/admin_index.html.twig', [
+            'form'       => $form,
             'pagination' => $pagination
         ]);
     }
@@ -77,7 +115,7 @@ class ProductController extends AbstractController
     public function create(
         Request $request,
         EntityManagerInterface $em,
-        #[Autowire('%kernel.project_dir%/assets/images/product')] string $imageFileDirectory
+        #[Autowire('%kernel.project_dir%')] string $directory
     ): Response {
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
@@ -89,11 +127,13 @@ class ProductController extends AbstractController
             if ($file) {
                 $newFilename = "{$uuid}.{$file->guessExtension()}";
                 try {
+                    $imageFileDirectory = $directory. "/assets/images/product/";
                     $file->move($imageFileDirectory, $newFilename);
                     $product->setUuid($uuid)
                             ->setImage($newFilename);
                     $em->persist($product);
                     $em->flush();
+                    $this->runNpmCommand($directory);
                     return $this->redirectToRoute('app_admin_product');
                 } catch (FileException $e) {
                     $this->addFlash(
@@ -116,9 +156,10 @@ class ProductController extends AbstractController
         Request $request,
         Product $product,
         EntityManagerInterface $em,
-        #[Autowire('%kernel.project_dir%/assets/images/product')] string $imageFileDirectory
+        #[Autowire('%kernel.project_dir%')] string $directory
     ): Response {
-        $oldFilePath= $imageFileDirectory. "/". $product->getImage();
+        $imageFileDirectory = $directory. "/assets/images/product/";
+        $oldFilePath= $imageFileDirectory . $product->getImage();
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
@@ -136,24 +177,34 @@ class ProductController extends AbstractController
                     if (file_exists($oldFilePath)) {
                         unlink($oldFilePath);
                     }
-
-                    $em->persist($product);
-                    $em->flush();
-                    return $this->redirectToRoute('app_admin_product');    
+                    $this->runNpmCommand($directory); 
                 } catch (FileException $e) {
                     $this->addFlash(
                         'admin-product-create-error',
-                        // "Fail to upload the file.",
-                        $e->getMessage()
+                        "Fail to upload the file.",
                     );
+
+                    return $this->render('product/admin_product_update.html.twig', [
+                        'form'      => $form,
+                        'product'   => $product
+                     ]);
                 }
             }
-             
+
+            $em->persist($product);
+            $em->flush(); 
+            return $this->redirectToRoute('app_admin_product'); 
         }
 
         return $this->render('product/admin_product_update.html.twig', [
             'form'      => $form,
             'product'   => $product
          ]);
+    }
+
+    private function runNpmCommand(string $directory): void
+    {
+        $command = 'npm run dev';
+        shell_exec("cd $directory && $command 2>&1");
     }
 }
