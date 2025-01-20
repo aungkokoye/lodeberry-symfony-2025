@@ -7,6 +7,7 @@ use App\Product\Form\AdminProductSearchType;
 use App\Product\Form\ProductSearchType;
 use App\Product\Form\ProductType;
 use App\Repository\ProductRepository;
+use App\Service\CacheManager;
 use App\Storage\CartSessionStorage;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -21,13 +22,21 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class ProductController extends AbstractController
 {
-    #[Route('/product', name: 'app_product')]
+    const ADMIN_INDEX_ROUTE_NAME = 'app_admin_product';
+    const INDEX_ROUTE_NAME = 'app_product';
+
+    #[Route('/product', name: self::INDEX_ROUTE_NAME)]
     public function index(
         Request $request,
         ProductRepository $productRepository,
         PaginatorInterface $paginator,
-        CartSessionStorage $cartSessionStorage
+        CartSessionStorage $cartSessionStorage,
+        CacheManager $cacheManager
     ): Response{
+
+        $currentPath = $request->getRequestUri();
+        $cacheManager->set(self::INDEX_ROUTE_NAME, $currentPath);
+
         $form = $this->createForm(ProductSearchType::class);
         $form->handleRequest($request);
         $query = $productRepository->createQueryBuilder('p')
@@ -59,20 +68,27 @@ class ProductController extends AbstractController
     }
 
     #[Route('/product/view/{id}', name: 'app_product_view')]
-    public function view(Product $product)
-    {
+    public function view(
+        Product $product,
+        CacheManager $cacheManager
+        ): Response {
         return $this->render('product/view.html.twig', [
-            'product' => $product,
+            'product'    => $product,
+            'indexPath'  => $cacheManager->get(self::INDEX_ROUTE_NAME)
         ]);
     }
 
-    #[Route('/admin/product', name: 'app_admin_product')]
+    #[Route('/admin/product', name: self::ADMIN_INDEX_ROUTE_NAME)]
     public function adminList(
         Request $request,
         ProductRepository $productRepository,
         PaginatorInterface $paginator,
+        CacheManager $cacheManager
     ): Response {
 
+        $currentPath = $request->getRequestUri();
+        $cacheManager->set(self::ADMIN_INDEX_ROUTE_NAME, $currentPath);
+ 
         $form = $this->createForm(AdminProductSearchType::class);
         $form->handleRequest($request);
 
@@ -115,6 +131,7 @@ class ProductController extends AbstractController
     public function create(
         Request $request,
         EntityManagerInterface $em,
+        CacheManager $cacheManager,
         #[Autowire('%kernel.project_dir%')] string $directory
     ): Response {
         $product = new Product();
@@ -134,7 +151,7 @@ class ProductController extends AbstractController
                     $em->persist($product);
                     $em->flush();
                     $this->runNpmCommand($directory);
-                    return $this->redirectToRoute('app_admin_product');
+                    return $this->redirectToRoute(SELF::ADMIN_INDEX_ROUTE_NAME);
                 } catch (FileException $e) {
                     $this->addFlash(
                         'admin-product-create-error',
@@ -147,7 +164,8 @@ class ProductController extends AbstractController
         }
 
         return $this->render('product/admin_product_create.html.twig', [
-           'form' => $form
+           'form'       => $form,
+           'indexPath'  => $cacheManager->get(self::ADMIN_INDEX_ROUTE_NAME)
         ]);
     }
 
@@ -156,6 +174,7 @@ class ProductController extends AbstractController
         Request $request,
         Product $product,
         EntityManagerInterface $em,
+        CacheManager $cacheManager,
         #[Autowire('%kernel.project_dir%')] string $directory
     ): Response {
         $imageFileDirectory = $directory. "/assets/images/product/";
@@ -193,12 +212,13 @@ class ProductController extends AbstractController
 
             $em->persist($product);
             $em->flush(); 
-            return $this->redirectToRoute('app_admin_product'); 
+            return $this->redirectToRoute(SELF::ADMIN_INDEX_ROUTE_NAME); 
         }
 
         return $this->render('product/admin_product_update.html.twig', [
             'form'      => $form,
-            'product'   => $product
+            'product'   => $product,
+            'indexPath' => $cacheManager->get(self::ADMIN_INDEX_ROUTE_NAME)
          ]);
     }
 

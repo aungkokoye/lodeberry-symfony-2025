@@ -26,9 +26,14 @@
             </a>
 
             <ul class="navbar-nav ml-auto ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" title="product list" href="{{ path('app_product') }}">
+                        <i class="fa fa-solid fa-bars fa-2x" aria-hidden="true"></i>
+                    </a>
+                </li>
                 {% if app.user %}
                     <li class="nav-item">
-                        <a class="nav-link" title="panel" href="{{ path('app_shopping_cart_checkout') }}">
+                        <a class="nav-link" title="check out" href="{{ path('app_shopping_cart_checkout') }}">
                             <i class="fa fa-shopping-basket fa-2x" aria-hidden="true"></i>
                         </a>
                     </li>

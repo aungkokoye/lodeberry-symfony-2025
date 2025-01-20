@@ -6,6 +6,13 @@
 {% block body %}
 
 <div class="container">
+    <hr>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{{ indexPath }}" style="text-decoration: none;"> Product Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Product View</li>
+        </ol>
+    </nav>
     <div class="row">
         <div class="col-4 col-md-4 col-sm-6">
             <img src="{{ asset('build/images/product/' ~ product.image) }}" alt="image" class="img-fluid"

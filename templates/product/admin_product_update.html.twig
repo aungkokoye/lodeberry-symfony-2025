@@ -8,6 +8,13 @@
 <div class="container">
     {% include '/component/message/form_error.html.twig' with {'form': form} %}
     {% include '/component/message/fail.html.twig' with {'key': 'admin-product-update-error'} %}
+    <hr>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{{ indexPath }}" style="text-decoration: none;">Admin Product Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Admin Product Update</li>
+        </ol>
+    </nav>
     <class class='card row'>
         <div class="card-header">
             <b> Product Update Form </b>
