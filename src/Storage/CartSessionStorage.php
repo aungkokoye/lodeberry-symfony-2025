@@ -9,21 +9,20 @@ class CartSessionStorage
 {
     const CART_KEY = 'loadberry-cart';
 
-    private ?Request $request;
 
-    public function __construct(RequestStack $requestStack)
+    public function __construct(private RequestStack $requestStack)
     {
-        $this->request = $requestStack->getCurrentRequest();
+    
     }
 
     public function getCart(): ?array
     {
-        return $this->request->getSession()->get(self::CART_KEY);
+        return $this->getRequest()->getSession()->get(self::CART_KEY);
     }
 
     private function setCart(array $cart): void
     {
-        $this->request->getSession()->set(self::CART_KEY, $cart);
+        $this->getRequest()->getSession()->set(self::CART_KEY, $cart);
     }
 
 
@@ -53,6 +52,8 @@ class CartSessionStorage
         if (is_array($cart)) {
             unset($cart[$productID]);
         }
+        
+        $this->setCart($cart);
     }
 
     public function getItemQuantity(int $productID): int
@@ -68,6 +69,11 @@ class CartSessionStorage
 
     public function destroyShoppingCart(): void
     {
-        $this->request->getSession()->remove(self::CART_KEY);
+        $this->getRequest()->getSession()->remove(self::CART_KEY);
+    }
+
+    public function getRequest(): ?Request
+    {
+        return $this->requestStack->getCurrentRequest();
     }
 }
